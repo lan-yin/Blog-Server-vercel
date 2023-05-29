@@ -12,21 +12,22 @@ const getBlogPostByCategory = asyncHandler(async (req, res) => {
   let getStatus = () => (increment < posts.length ? 200 : 201); // 201 response means last chunk of blog posts
 
   if (category === "all") {
-    res.status(getStatus()).json(posts.slice(pageNumber, increment));
+    res.header("Access-Control-Allow-Origin", "*").status(getStatus()).json(posts.slice(pageNumber, increment));
   } else if (category == "latest") {
     res
+      .header("Access-Control-Allow-Origin", "*")
       .status(getStatus())
       .json(posts.sort((objA, objB) => Number(objB.createdAt) - Number(objA.createdAt)).slice(pageNumber, increment));
   } else {
     const blogPosts = await BlogPost.find({ category });
-    res.status(getStatus()).json(blogPosts.slice(pageNumber, increment));
+    res.header("Access-Control-Allow-Origin", "*").status(getStatus()).json(blogPosts.slice(pageNumber, increment));
   }
 });
 
 const getBlogPost = asyncHandler(async (req, res) => {
   const blogPost = await BlogPost.findById(req.params.id);
   if (blogPost) {
-    res.json(blogPost);
+    res.header("Access-Control-Allow-Origin", "*").json(blogPost);
   } else {
     res.status(404).send("Blog Post not found.");
   }
@@ -49,7 +50,7 @@ const createBlogPost = asyncHandler(async (req, res) => {
   await newBlogPost.save();
   const blogPosts = await BlogPost.find({});
   if (newBlogPost) {
-    res.json(blogPosts);
+    res.header("Access-Control-Allow-Origin", "*").json(blogPosts);
   } else {
     res.status(404).send("Blog post could not be stored.");
   }
@@ -81,7 +82,7 @@ const deletePost = asyncHandler(async (req, res) => {
   const allBlogPosts = await BlogPost.find({});
 
   if (allBlogPosts) {
-    res.json(allBlogPosts);
+    res.header("Access-Control-Allow-Origin", "*").json(allBlogPosts);
   } else {
     res.status(404).send("Blog post could not be removed.");
   }
