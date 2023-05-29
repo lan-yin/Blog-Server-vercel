@@ -3,6 +3,7 @@ dotenv.config();
 import db from "./db.js";
 import express from "express";
 import path from "path";
+import cors from "cors";
 
 // our Routes
 import blogPostRoutes from "./routes/blogPostRoutes.js";
@@ -10,6 +11,7 @@ import userRoutes from "./routes/userRoutes.js";
 
 db();
 const app = express();
+app.use(cors());
 
 app.use(
   express.json({
